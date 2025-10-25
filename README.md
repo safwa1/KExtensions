@@ -16,6 +16,7 @@ A small, pragmatic collection of high‑quality C# extension methods and tiny ut
 - [Install](#install)
 - [Quick start](#quick-start)
 - [What you get](#what-you-get)
+  - [Range](#ranges)
   - [Strings](#strings)
   - [Collections & arrays](#collections--arrays)
   - [Numbers & percentages](#numbers--percentages)
@@ -91,6 +92,13 @@ Console.Table(new[] { new { Id = 1, Name = "A" }, new { Id = 2, Name = "B" } });
 ## What you get
 
 KExtensions groups extensions by domain so you can discover functionality quickly. Below are the most commonly used areas with practical examples.
+
+### Ranges
+use `..` to create ranges:
+
+  ```csharp
+  foreach (var i in 1..10) { /* ... */ }
+  ```
 
 ### Strings
 Rich helpers for empty/blank checks, casing, slicing, partitions, simple templating, and byte conversions. Highlights:
