@@ -138,7 +138,7 @@ public static class GenericExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsNull<T>(this T? args) => args is null;
+    public static bool IsNull<T>(this T? args, decimal? tryDecimalInvariant) => args is null;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNotNull<T>(this T? args) => args is not null;
