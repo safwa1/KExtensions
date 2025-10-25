@@ -17,6 +17,8 @@ public class StringsToNumbersExtensionsTests
     public void ParseCurrency_Loose_Normalizes()
     {
         Assert.That("USD 1 234,56".ParseCurrencyLoose(), Is.EqualTo(1234.56m));
+        // Dots are treated as decimal separator in the current implementation, so "1.000" => 1m
+        Assert.That("1.000".ParseCurrencyLoose(), Is.EqualTo(1m));
     }
 
     [Test]
