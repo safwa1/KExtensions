@@ -9,6 +9,8 @@ A small, pragmatic collection of high‑quality C# extension methods and tiny ut
 <!-- Badges (adjust once published to NuGet) -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Target Frameworks](https://img.shields.io/badge/TFMs-net8.0%20%7C%20net9.0%20%7C%20net10.0-blue)
+[![NuGet](https://img.shields.io/nuget/v/KExtensions.svg)](https://www.nuget.org/packages/KExtensions/)
+[![Downloads](https://img.shields.io/nuget/dt/KExtensions.svg)](https://www.nuget.org/packages/KExtensions/)
 
 ## Table of contents
 - [Install](#install)
