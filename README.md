@@ -16,7 +16,7 @@ A small, pragmatic collection of high‑quality C# extension methods and tiny ut
 - [Install](#install)
 - [Quick start](#quick-start)
 - [What you get](#what-you-get)
-  - [Range](#ranges)
+  - [Ranges](#ranges)
   - [Strings](#strings)
   - [Collections & arrays](#collections--arrays)
   - [Numbers & percentages](#numbers--percentages)
@@ -31,6 +31,11 @@ A small, pragmatic collection of high‑quality C# extension methods and tiny ut
   - [DataTable helpers](#datatable-helpers)
   - [Speed & Size formatting](#speed--size-formatting)
   - [DateTime extras](#datetime-extras)
+  - [Generic helpers](#generic-helpers)
+  - [Delegate helpers](#delegate-helpers)
+  - [Dict-of-lists & array helpers](#dict-of-lists--array-helpers)
+  - [Char helpers](#char-helpers)
+  - [Nullable and type helpers](#nullable-and-type-helpers)
 - [Supported frameworks](#supported-frameworks)
 - [Design goals](#design-goals)
 - [FAQ](#faq)
@@ -363,6 +368,103 @@ var hijri = DateTime.Now.ToHijriDate(); // e.g., "1447/05/20"
 ```
 
 Note: `ToHijriDate` uses `System.Globalization.HijriCalendar`.
+
+### Generic helpers
+General utilities for conversion, numeric checks, quick dumps, and type checks from `GenericExtensions`:
+
+```csharp
+object any = "42";
+int? n = any.To<int>();                  // 42 (invariant culture)
+decimal? d = "3,14".To<decimal>();      // 3.14 (invariant culture)
+
+42.IsNumeric();                          // true
+"x".IsNumeric();                         // false
+
+var user = new { Id = 1, Name = "A" };
+user.Dump();                              // writes to Console
+user.Dump("Created");                    // "Created: { ... }"
+
+"hello".TypeIs<string>();                // true
+"hello".TypeIsExact<object>();           // false (exact type check)
+"hello".TypeIsAssignableTo<object>();    // true
+```
+
+Notes:
+- `To<T>` is forgiving and returns `default` on conversion failure; it uses invariant culture for numbers and supports enums by name or underlying value.
+
+### Delegate helpers
+Invoke multicast delegates without losing handlers when one throws, from `DelegateExtensions`:
+
+```csharp
+// Multicast Action
+Action chain = () => Console.WriteLine("A");
+chain += () => throw new InvalidOperationException("boom");
+chain += () => Console.WriteLine("C");
+
+chain.SafeInvoke(); // Executes all; then throws AggregateException with 1 inner exception
+
+// Any delegate with parameters
+EventHandler? onChanged = null;
+onChanged += (s, e) => Console.WriteLine("first");
+onChanged += (s, e) => throw new Exception("bad");
+onChanged.SafeInvoke(null, EventArgs.Empty); // calls both; then throws AggregateException
+```
+
+### Dict-of-lists & array helpers
+Convenience when working with `Dictionary<TKey, ICollection<T>>` and arrays, see `DictListExtensions`:
+
+```csharp
+var dict = new Dictionary<string, List<int>>();
+
+dict.AddToCollection("a", 1);
+dict.AddToCollection("a", 2);
+// dict["a"] == [1, 2]
+
+bool removed = dict.RemoveFromCollection("a", 1); // true; removes key when last item removed
+
+var l1 = new List<int> {1,2,3};
+var l2 = new List<int> {3,2,1};
+l1.CompareLists(l2, isOrdered: false); // true
+l1.CompareLists(l2, isOrdered: true);  // false
+
+new[]{1,2,3,4}.ContainsSequence(new[]{2,3}); // true
+```
+
+### Char helpers
+ASCII / Unicode character classification shortcuts from `CharExtensions`:
+
+```csharp
+'a'.IsAsciiLetterLower(); // true
+'Z'.IsAsciiLetterUpper(); // true
+'5'.IsAsciiDigit();       // true
+
+char.IsLetter('ß');       // baseline .NET
+'t'.IsLetter();           // wrapper over char APIs
+
+'a'.ToUpperInvariant();   // 'A'
+'a'.IsBetween('a','f');   // true
+
+// On strings at index
+"A1".IsDigitAt(1);       // true
+"A1".IsLetterAt(0);      // true
+```
+
+### Nullable and type helpers
+Helpers for dealing with `Nullable<T>` and exact/nullable checks (from `DictListExtensions`), and type predicates (from `GenericExtensions`):
+
+```csharp
+Type t = typeof(int);
+
+t.IsNullable();                // false
+t.ToNullable();                // typeof(int?)
+
+Type? maybe = typeof(int?);
+maybe.IsExactOrNullable<int>(); // true
+
+object o = "str";
+o.TypeIs<string>();             // true
+o.TypeIsExact<object>();        // false
+```
 
 ## Supported frameworks
 - net8.0
