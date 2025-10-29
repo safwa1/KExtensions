@@ -1,8 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel;
+using System.Data;
+using System.Runtime.CompilerServices;
 
-namespace KExtensions;
+namespace KExtensions.Collections;
 
-public static class EnumerableExtensions
+public static class CollectionsExtensions
 {
     private const int StackLimit = 1024;
     
@@ -185,5 +187,128 @@ public static class EnumerableExtensions
         }
 
         if (batch.Count > 0) yield return batch;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static string[] ToSqlParams(this string[]? self)
+    {
+        if (self == null) return [];
+        
+        string[] result = new string[self.Length];
+
+        for (var i = 0; i < self.Length; i++)
+        {
+            result[i] = $"@{self[i]}";
+        }
+        
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ForEach<T>(this T[] array, Action<T> action)
+    {
+        foreach (var element in array)
+        {
+            action(element);
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ForEach<T>(this Span<T> span, Action<T> action)
+    {
+        foreach (var element in span)
+        {
+            action(element);
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ForEachIndexed<T>(this T[] array, Action<int, T> action)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            action(i, array[i]);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ForEachIndexed<T>(this Span<T> span, Action<int, T> action)
+    {
+        for (int i = 0; i < span.Length; i++)
+        {
+            action(i, span[i]);
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static DataTable ToDataTable<T>(this IEnumerable<T> data)
+    {
+        PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
+        DataTable table = new DataTable();
+        for (int i = 0; i < props.Count; i++)
+        {
+            PropertyDescriptor prop = props[i];
+            table.Columns.Add(prop.Name, prop.PropertyType);
+        }
+        object?[] values = new object?[props.Count];
+        foreach (T item in data)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = props[i].GetValue(item);
+            }
+            table.Rows.Add(values);
+        }
+        return table;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IEnumerable<T> TakeUnlessEmpty<T>(this IEnumerable<T> source)
+    {
+        var empty = source as T[] ?? [.. source];
+        return empty.Length != 0 ? empty : [];
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IEnumerable<T> FilterNot<T>(this IEnumerable<T> source, Func<T, bool> predicate) =>
+        source.Where(x => !predicate(x));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IEnumerable<TResult> MapNotNull<T, TResult>(this IEnumerable<T> source, Func<T, TResult?> selector)
+        where TResult : class =>
+        source.Select(selector).Where(x => x != null)!;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ForEachIndexed<T>(this IEnumerable<T> source, Action<int, T> action)
+    {
+        int index = 0;
+        foreach (var item in source)
+            action(index++, item);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+    {
+        var seen = new HashSet<TKey>();
+        foreach (var item in source)
+            if (seen.Add(keySelector(item))) yield return item;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEmpty<T>(this List<T> list)
+    {
+        return list.Count == 0;
+    }    
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEmpty<T>(this IEnumerable<T> source)
+    {
+        return !source.Any();
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEmpty<T>(this T[] list)
+    {
+        return list.Length == 0;
     }
 }

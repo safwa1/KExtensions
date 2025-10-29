@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace KExtensions;
+namespace KExtensions.Strings;
 
 public static partial class StringExtensions
 {

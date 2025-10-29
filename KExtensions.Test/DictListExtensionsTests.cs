@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using KExtensions;
+using KExtensions.Collections;
 using NUnit.Framework;
 
 namespace KExtensions.Test;

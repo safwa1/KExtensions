@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace KExtensions;
+namespace KExtensions.Collections;
 
 public static class DataTableExtensions
 {

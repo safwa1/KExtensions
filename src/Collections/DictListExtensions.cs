@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace KExtensions;
+namespace KExtensions.Collections;
 
 public static class DictListExtensions
 {

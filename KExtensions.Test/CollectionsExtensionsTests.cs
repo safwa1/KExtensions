@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using KExtensions;
+using KExtensions.Collections;
 using NUnit.Framework;
 
 namespace KExtensions.Test;

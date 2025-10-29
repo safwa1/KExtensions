@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace KExtensions;
+namespace KExtensions.Numbers;
 
 public static class SpeedAndSizeExtensions
 {

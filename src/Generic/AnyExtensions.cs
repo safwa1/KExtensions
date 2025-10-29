@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace KExtensions;
+namespace KExtensions.Generic;
 
 public static class AnyExtensions
 {

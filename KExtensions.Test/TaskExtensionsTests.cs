@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using KExtensions;
+using KExtensions.Tasks;
 using NUnit.Framework;
 
 namespace KExtensions.Test;
@@ -19,13 +20,14 @@ public class TaskExtensionsTests
     }
 
     [Test]
-    public async Task SafeFireAndForget_Invokes_OnException_Callback()
+    public Task SafeFireAndForget_Invokes_OnException_Callback()
     {
         Exception? captured = null;
         var t = Task.Run(() => throw new ApplicationException("fail"));
-        await t.SafeFireAndForget(returnToCallingContext: false, onException: ex => captured = ex);
+        t.SafeFireAndForget(returnToCallingContext: false, onException: ex => captured = ex);
         Assert.That(captured, Is.InstanceOf<ApplicationException>());
         Assert.That(captured!.Message, Is.EqualTo("fail"));
+        return Task.CompletedTask;
     }
 
     [Test]

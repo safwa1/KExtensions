@@ -1,25 +1,22 @@
-﻿namespace KExtensions;
+﻿using System.Reflection;
+
+namespace KExtensions;
 
 public static class DelegateExtensions
 {
-    /// <summary>
-    /// Safe invoke multicast delegate
-    /// Ever wanted to call a multicast delegate but you want the entire invocation list to be called even if an exception
-    /// occurs in any in the chain. Then you are in luck, I have created an extension method that does just that, throwing an 
-    /// AggregateException only after execution of the entire list completes:
-    /// </summary>
-    /// <param name="del"></param>
-    /// <param name="args"></param>
-    /// <exception cref="AggregateException"></exception>
-    public static void SafeInvoke(this Delegate? del, params object[] args)
+    private static void InvokeAll(IEnumerable<Delegate> handlers, Action<Delegate> invoker)
     {
-        if (del == null) return;
         var exceptions = new List<Exception>();
-        foreach (var handler in del.GetInvocationList())
+
+        foreach (var handler in handlers)
         {
             try
             {
-                handler.Method.Invoke(handler.Target, args);
+                invoker(handler);
+            }
+            catch (TargetInvocationException ex)
+            {
+                exceptions.Add(ex.InnerException ?? ex);
             }
             catch (Exception ex)
             {
@@ -27,30 +24,44 @@ public static class DelegateExtensions
             }
         }
 
-        if (exceptions.Count != 0)
-        {
+        if (exceptions.Count > 0)
             throw new AggregateException(exceptions);
-        }
     }
-    
-    public static void SafeInvoke(this Action? action)
+
+    /// <summary>
+    /// Invokes all delegates in the multicast chain safely.
+    /// Exceptions from individual handlers are collected and thrown as an AggregateException after completion.
+    /// </summary>
+    public static void SafeInvoke(this Delegate? self, params object[] args)
     {
-        if (action == null) return;
+        if (self == null) return;
+        InvokeAll(self.GetInvocationList(), h => h.Method.Invoke(h.Target, args));
+    }
 
-        var exceptions = new List<Exception>();
-        foreach (var handler in action.GetInvocationList())
-        {
-            try
-            {
-                ((Action)handler)();
-            }
-            catch (Exception ex)
-            {
-                exceptions.Add(ex);
-            }
-        }
+    /// <summary>
+    /// Similar to <see cref="SafeInvoke"/> but uses DynamicInvoke for more flexible (but slower) invocation.
+    /// </summary>
+    public static void SafeDynamicInvoke(this Delegate? self, params object[] args)
+    {
+        if (self == null) return;
+        InvokeAll(self.GetInvocationList(), h => h.DynamicInvoke(args));
+    }
 
-        if (exceptions.Count != 0)
-            throw new AggregateException(exceptions);
+    /// <summary>
+    /// Specialized safe invocation for parameterless Action delegates.
+    /// </summary>
+    public static void SafeInvoke(this Action? self)
+    {
+        if (self == null) return;
+        InvokeAll(self.GetInvocationList(), h => ((Action)h)());
+    }
+
+    /// <summary>
+    /// Specialized safe invocation for single-argument Action delegates.
+    /// </summary>
+    public static void SafeInvoke<T>(this Action<T>? self, T arg)
+    {
+        if (self == null) return;
+        InvokeAll(self.GetInvocationList(), h => ((Action<T>)h)(arg));
     }
 }

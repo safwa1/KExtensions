@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using KExtensions.Utils;
 
-namespace KExtensions;
+namespace KExtensions.Generic;
 
 public static class GenericExtensions
 {

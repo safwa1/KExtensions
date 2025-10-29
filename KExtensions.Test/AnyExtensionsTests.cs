@@ -1,3 +1,4 @@
+using KExtensions.Generic;
 using NUnit.Framework;
 
 namespace KExtensions.Test;

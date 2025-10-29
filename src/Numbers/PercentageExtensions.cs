@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace KExtensions;
+namespace KExtensions.Numbers;
 
 public static class PercentageExtensions
 {

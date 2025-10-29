@@ -2,7 +2,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace KExtensions;
+namespace KExtensions.Strings;
 
 public static partial class CheckStringsExtensions
 {

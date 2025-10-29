@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace KExtensions;
+namespace KExtensions.Collections;
 
 public static class JoinExtensions
 {

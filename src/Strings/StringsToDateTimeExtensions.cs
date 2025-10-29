@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-namespace KExtensions;
+namespace KExtensions.Strings;
 
 public static class StringDateTimeExtensions
 {

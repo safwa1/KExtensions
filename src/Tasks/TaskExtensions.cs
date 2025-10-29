@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks.Dataflow;
 
-namespace KExtensions;
+namespace KExtensions.Tasks;
 
 public static class TaskExtensions
 {
@@ -34,32 +34,6 @@ public static class TaskExtensions
                 // Nothing to do here
             }
         }
-    }
-    
-    // NOTE: Async void is intentional here. This provides a way
-    // to call an async method from the constructor while
-    // communicating intent to fire and forget, and allow
-    // handling of exceptions
-    public static async Task SafeFireAndForget(this Task task,
-        bool returnToCallingContext,
-        Action<Exception>? onException = null)
-    {
-        try
-        {
-            await task.ConfigureAwait(returnToCallingContext);
-        }
-
-        // if the provided action is not null, catch and
-        // pass the thrown exception
-        catch (Exception ex) when (onException != null)
-        {
-            onException(ex);
-        }
-    }
-    
-    public static async Task SafeFireAndForget(this Task task)
-    {
-        await task.SafeFireAndForget(returnToCallingContext: true);
     }
     
     public static async Task<(WriteOnceBlock<T> result, WriteOnceBlock<Exception> exception)> SplitIntoBlocks<T>(

@@ -1,5 +1,6 @@
 using System;
 using KExtensions;
+using KExtensions.Strings;
 using NUnit.Framework;
 
 namespace KExtensions.Test;

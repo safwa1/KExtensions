@@ -1,3 +1,5 @@
+using KExtensions.Strings;
+
 namespace KExtensions.Test;
 
 [TestFixture]

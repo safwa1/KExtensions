@@ -2,14 +2,15 @@
 
     <PropertyGroup>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <IsAotCompatible Condition="$(TargetFramework.StartsWith('netstandard')) == false">true</IsAotCompatible>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>preview</LangVersion>
         <RootNamespace>KExtensions</RootNamespace>
         <PackageId>KExtensions</PackageId>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>0.1.0</Version>
-        <ReleaseVersion>0.1.0</ReleaseVersion>
+        <Version>0.1.1</Version>
+        <ReleaseVersion>0.1.1</ReleaseVersion>
         <Authors>Safwan Abdulghani</Authors>
         <Company>Safwan.pro</Company>
         <Description>
