@@ -26,7 +26,7 @@ public static class DictListExtensions
         return removed;
     }
         
-    public static bool CompareLists<T>(this IReadOnlyList<T>? list1, IReadOnlyList<T>? list2, bool isOrdered = true)
+    public static bool CompareLists<T>(this IReadOnlyList<T>? list1, IReadOnlyList<T>? list2, bool isOrdered = true) where T : notnull
     {
         if (list1 == null && list2 == null) return true;
         if (list1 == null || list2 == null || list1.Count != list2.Count) return false;

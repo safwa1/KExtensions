@@ -32,15 +32,15 @@ public static class NumericExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Increment<T>(this T number, T amount = default) where T : INumber<T>
+    public static T Increment<T>(this T number, T? amount = default) where T : INumber<T>
     {
-        return number + (amount == default ? T.One : amount);
+        return number + (amount == default || amount == null ? T.One : amount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T Decrement<T>(this T number, T amount = default) where T : INumber<T>
+    public static T Decrement<T>(this T number, T? amount = default) where T : INumber<T>
     {
-        return number - (amount == default ? T.One : amount);
+        return number - (amount == default || amount == null ? T.One : amount);
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

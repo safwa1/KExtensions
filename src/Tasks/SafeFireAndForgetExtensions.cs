@@ -7,8 +7,8 @@ namespace KExtensions.Tasks;
 /// </summary> 
 public static partial class SafeFireAndForgetExtensions
 {
-	static Action<Exception>? _onException;
-	static bool _shouldAlwaysRethrowException;
+	private static Action<Exception>? _onException;
+	private static bool _shouldAlwaysRethrowException;
 
 	/// <summary>
 	/// Safely execute the ValueTask without waiting for it to complete before moving to the next line of code; commonly known as "Fire And Forget". Inspired by John Thiriet's blog post, "Removing Async Void": https://johnthiriet.com/removing-async-void/.
