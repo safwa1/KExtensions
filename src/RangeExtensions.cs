@@ -2,18 +2,18 @@ using KExtensions.Utils;
 
 namespace KExtensions;
 
-public static class RangeExtensions {
-
-    public static  CustomIntEnumerator GetEnumerator(this Range range)
+public static class RangeExtensions
+{
+    public static CustomIntEnumerator GetEnumerator(this Range range)
     {
         return new CustomIntEnumerator(range);
     }
 
-    public static  CustomIntEnumerator GetEnumerator(this int number)
+    public static CustomIntEnumerator GetEnumerator(this int number)
     {
         return new CustomIntEnumerator(new Range(0, number));
     }
-    
+
     public static bool All(this Range range, Func<int, bool> func)
     {
         int start = range.Start.Value;
@@ -26,7 +26,7 @@ public static class RangeExtensions {
 
         return true;
     }
-    
+
     public static void ForEach(this Range range, Action<int> callback)
     {
         int start = range.Start.Value;
@@ -60,7 +60,7 @@ public static class RangeExtensions {
 
         if (count < 0)
             throw new ArgumentException("End value must be greater than or equal to start value.");
-        
+
         return Enumerable.Range(start, end);
     }
 
@@ -68,27 +68,27 @@ public static class RangeExtensions {
     {
         return range.Iterator().Sum();
     }
-    
+
     public static int Single(this Range range)
     {
         return range.Iterator().Single();
     }
-    
+
     public static int? SingleOrDefault(this Range range)
     {
         return range.Iterator().SingleOrDefault();
     }
-    
+
     public static IEnumerable<int> Skip(this Range range, int count)
     {
         return range.Iterator().Skip(count);
     }
-    
+
     public static IEnumerable<int> SkipLast(this Range range, int count)
     {
         return range.Iterator().SkipLast(count);
     }
-    
+
     public static IEnumerable<int> SkipWhile(this Range range, Func<int, bool> predicate)
     {
         return range.Iterator().SkipWhile(predicate);
@@ -98,7 +98,7 @@ public static class RangeExtensions {
     {
         return range.Iterator().All(predicate);
     }
-    
+
     public static IEnumerable<TResult> Select<TResult>(this Range range, Func<int, TResult> selector)
     {
         int start = range.Start.Value;
@@ -112,5 +112,4 @@ public static class RangeExtensions {
 
         return Enumerable.Range(start, end).Select(selector);
     }
-
 }
