@@ -2,10 +2,6 @@
 
 A small, pragmatic collection of high‑quality C# extension methods and tiny utilities for everyday .NET apps and libraries. Focused on ergonomics, readability, and reducing boilerplate.
 
-- Targets: .NET 8, .NET 9, .NET 10
-- Package Id: `KExtensions`
-- License: MIT
-
 <!-- Badges (adjust once published to NuGet) -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Target Frameworks](https://img.shields.io/badge/TFMs-net8.0%20%7C%20net9.0%20%7C%20net10.0-blue)
