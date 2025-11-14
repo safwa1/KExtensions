@@ -28,18 +28,21 @@ public static class AnyExtensions
     /// Use for null checking and transforming values.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static TResult Let<T, TResult>(this T obj, Func<T, TResult> block)
+    public static TResult? Let<T, TResult>(this T? obj, Func<T, TResult> block)
+        where T : notnull
     {
-        return block(obj);
+        return obj is null ? default : block(obj);
     }
 
     /// <summary>
     /// Kotlin's "let" (void version) - Calls the specified action with 'this' value as its argument.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Let<T>(this T obj, Action<T> block)
+    public static void Let<T>(this T? obj, Action<T> block)
+        where T : notnull
     {
-        block(obj);
+        if (obj is not null)
+            block(obj);
     }
 
     /// <summary>
@@ -68,17 +71,17 @@ public static class AnyExtensions
     /// Kotlin's "takeIf" - Returns 'this' value if it satisfies the given predicate, otherwise returns null.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T? TakeIf<T>(this T obj, Func<T, bool> predicate) where T : class
+    public static T? TakeIf<T>(this T obj, Func<T, bool> predicate) where T : notnull
     {
-        return predicate(obj) ? obj : null;
+        return predicate(obj) ? obj : default;
     }
 
     /// <summary>
     /// Kotlin's "takeUnless" - Returns 'this' value if it does NOT satisfy the given predicate, otherwise returns null.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T? TakeUnless<T>(this T obj, Func<T, bool> predicate) where T : class
+    public static T? TakeUnless<T>(this T obj, Func<T, bool> predicate) where T : notnull
     {
-        return predicate(obj) ? null : obj;
+        return predicate(obj) ? default : obj;
     }
 }
